@@ -13,7 +13,7 @@ class BitOutputStream {
 private:
   ostream& out;  // the ostream to delegate to
   char buf;     // the buffer of bits
-  //  bitset<8> buf;     // the buffer of bits
+  //  bitset<8> buf;     // the buffer of bits (optional)
   int bufi;     // the bit buffer index
 
 public:
