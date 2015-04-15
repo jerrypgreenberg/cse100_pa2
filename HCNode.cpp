@@ -10,7 +10,7 @@ bool HCNode::operator< (HCNode const & other)
     return symbol < other.symbol; 
 }
 
-bool HCNode::comp(HCNode* one, HCNode* other) 
+bool comp(HCNode* one, HCNode* other) 
 {
     //must dereference the pointers must or you'll get error
     return *one < *other;

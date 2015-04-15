@@ -1,12 +1,12 @@
 #include "HCTree.hpp"
-#include "HCNode.hpp"
+#include <stack>
 
 void HCTree::build(const vector<int>& freqs)
 {
     if (freqs.size() == 0) return;
 
-    std::priority_queue<HCNode*, std::vector<HCNode*>,HCNodePtrCmp> pQueue;
-    for (int i = 0; i < freqs.size(); i++){
+    std::priority_queue<HCNode*, std::vector<HCNode*>,HCNodePtrComp> pQueue;
+    for (unsigned int i = 0; i < freqs.size(); i++){
         //skip creating new nodes if a byte doesn't exists
         //Thus, a byte would have frequency of 0
         if (freqs[i] != 0){
@@ -63,7 +63,7 @@ void HCTree::encode(byte symbol, BitOutputStream& out) const
         currNode = parentNode;
     }
 
-    for (int i = 0; i < stack.size(); i++){
+    for (unsigned int i = 0; i < stack.size(); i++){
         int encodedBit = stack.top();
         out.writeBit(encodedBit);
         stack.pop(); //remove each element once it's written
@@ -98,7 +98,7 @@ HCTree::~HCTree()
     root = nullptr;
 }
 
-void clearTree(HCNode *node)
+void HCTree::clearTree(HCNode *node)
 {
     if (node != nullptr){
         //go left first and then right recursively

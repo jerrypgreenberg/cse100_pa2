@@ -1,9 +1,9 @@
 #include "BitOutputStream.hpp"
 
-void writeBit(int bit)
+void BitOutputStream::writeBit(int bit)
 {
     //buffer is now full
-    if (bufi == 0){
+    if (bufi == 8){
         flush();
     }
     //move the buffer by one bit so we can append one bit 
@@ -14,18 +14,21 @@ void writeBit(int bit)
     buf |= bit;
 }
 
-void writeByte(int b)
+void BitOutputStream::writeByte(int b)
 {
     unsigned char character = (unsigned char)b;
     out.put(character);
 }
 
-void writeInt(int i)
-{   //TODO
-    out.write();
+void BitOutputStream::writeInt(int i)
+{
+    for(int index = 24; index > 0; index -= 8){
+        int byteInt = i>>index;
+        writeByte(byteInt);
+    }
 }
 
-void flush()
+void BitOutputStream::flush()
 {
     out.put(buf);
     out.flush();
