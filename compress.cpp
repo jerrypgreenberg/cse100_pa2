@@ -21,10 +21,8 @@ int main(int argc, char* argv[]) {
     fill(inputTraversal.begin(),inputTraversal.end(),0);
     HCTree encodeTree;
     char c = 0;
-    int uniqueCount = 0;
-    
-    encodeFile.open(argv[2],ios::binary);
-    inputFile.open(argv[1],ios::binary);
+    encodeFile.open(argv[2]);
+    inputFile.open(argv[1]);
     BitOutputStream outputStream(encodeFile);
     
     if(!inputFile){
@@ -41,12 +39,9 @@ int main(int argc, char* argv[]) {
     while(inputFile.good() == true){
       inputFile.get(c);
       int curr = inputTraversal.at(c);
-      if(curr == 0)
-	++uniqueCount;
       curr++;
       inputTraversal[c]= curr;
     }
-    cout << "Found " << uniqueCount << " unique symbols in input file of size " << sizeof(inputFile) << " bytes" << endl;
  
     if(!inputFile.eof()){
       cerr << "Error reading from input file!" << endl;
@@ -55,7 +50,8 @@ int main(int argc, char* argv[]) {
     
     cout << "Building Huffman code tree...." << endl;
     encodeTree.build(inputTraversal);
-    inputFile.seekg(0,inputFile.beg);
+    inputFile.close();
+    inputFile.open(argv[1]);
     c = 0;
     cout << "Writing to output file " << argv[2] << endl;
     
@@ -71,10 +67,6 @@ int main(int argc, char* argv[]) {
     
     //Write out anything left in the buffer using flush()
     outputStream.flush();
-    
-       
-    cout << "Output file has size " << encodeFile.tellp() << "bytes" << endl;
-					
     inputFile.close();
     encodeFile.close();
      /* if(c == 10)
