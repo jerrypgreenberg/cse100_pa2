@@ -41,10 +41,17 @@ public:
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
      *  the frequency of occurrence of byte i in the message.
-     *  POSTCONDITION:  root points to the root of the trie,
+     *  POSTCONDITION:  root points to the root of the tree,
      *  and leaves[i] points to the leaf node containing byte i.
      */
     void build(const vector<int>& freqs);
+    /**
+     * Overloaded Build function that takes a BitInputStream object
+     * for reconstructing the HUffman tree from the header of an encoded
+     * file. Reads the header and returns root pointing to the rot of the 
+     * tree.
+     */
+    void build(BitInputStream& header)
 
     /** Write to the given BitOutputStream
      *  the sequence of bits coding the given symbol.
