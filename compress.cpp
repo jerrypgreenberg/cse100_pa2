@@ -38,6 +38,8 @@ int main(int argc, char* argv[]) {
     cout << "Reading Input...." << endl;
     while(inputFile.good() == true){
       inputFile.get(c);
+      if(inputFile.eof())
+          break;
       int curr = inputTraversal.at(c);
       curr++;
       inputTraversal[c]= curr;
@@ -69,24 +71,4 @@ int main(int argc, char* argv[]) {
     outputStream.flush();
     inputFile.close();
     encodeFile.close();
-     /* if(c == 10)
-         continue;
-      isFound = false;
-      if(inputTraversal.size() == 0){
-       HCNode* insert = new HCNode(1,c);
-       inputTraversal.push_back(*insert);
-       continue;
-      }
-      for(vector<HCNode>::iterator it = inputTraversal.begin(); it != inputTraversal.end(); ++it){
-        if(it->symbol == c){
-            it->count += 1;
-	    isFound = true;
-            break;
-         }
-        }
-         if(isFound == true)
-           continue;       
-         HCNode* newNode = new HCNode(1,c);
-         inputTraversal.push_back(*newNode);
-   }*/
 };

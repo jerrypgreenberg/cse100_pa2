@@ -4,7 +4,10 @@
 void HCTree::build(const vector<int>& freqs)
 {
     if (freqs.size() == 0) return;
-
+    for(int i = 0; i < 256; ++i){
+        if(freqs[i] != 0)
+	   cout << " " << i << " " << (char) i << " " << freqs[i] << " " << endl;
+    }
     std::priority_queue<HCNode*, std::vector<HCNode*>,HCNodePtrComp> pQueue;
     for (unsigned int i = 0; i < freqs.size(); i++){
         //skip creating new nodes if a byte doesn't exists
@@ -32,6 +35,7 @@ void HCTree::build(const vector<int>& freqs)
         //add the two popped nodes to the new parent node
         nodeOne->p = parent;
         nodeTwo->p = parent;
+        cout << "Parent Cout: " << parent->count << " Parent Symbol:  " << parent->symbol << " Parent c0 Child: " << parent->c0->symbol << " Parent c1 Child: " <<  parent->c1->symbol << endl; 
        
        //add the new root node to the queue again
        pQueue.push(parent);
@@ -41,6 +45,7 @@ void HCTree::build(const vector<int>& freqs)
     //there is only one node, that is the root
     if (pQueue.size() == 1){
         root = pQueue.top();
+        cout << "Root Symbol: " << root->symbol << " Root Count: " << root->count << endl;
         pQueue.pop();    
     }
 
