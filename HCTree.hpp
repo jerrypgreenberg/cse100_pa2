@@ -30,7 +30,9 @@ class HCTree {
 private:
     HCNode* root;
     vector<HCNode*> leaves;
+    vector<int> symbolList;
     void clearTree(HCNode *node); 
+    int headerSize;
 public:
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);

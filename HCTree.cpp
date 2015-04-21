@@ -6,7 +6,6 @@ void HCTree::build(const vector<int>& freqs)
     if (freqs.size() == 0) return;
     for(int i = 0; i < 256; ++i){
         if(freqs[i] != 0)
-	   cout << " " << i << " " << (char) i << " " << freqs[i] << " " << endl;
     }
     std::priority_queue<HCNode*, std::vector<HCNode*>,HCNodePtrComp> pQueue;
     for (unsigned int i = 0; i < freqs.size(); i++){
@@ -15,6 +14,7 @@ void HCTree::build(const vector<int>& freqs)
         if (freqs[i] != 0){
             //count, symbol
             leaves[i] = new HCNode(freqs[i],i);
+            symbolList.push_back(i);
             //add to the queue
             pQueue.push(leaves[i]);            
         }
@@ -22,21 +22,17 @@ void HCTree::build(const vector<int>& freqs)
     
     while (pQueue.size() > 1){
         HCNode *nodeOne, *nodeTwo;
-        
         //we will pop them twice
         nodeOne = pQueue.top();
         pQueue.pop();
         nodeTwo = pQueue.top();
         pQueue.pop();
-
         int totalCount = nodeOne->count + nodeTwo->count;
         //create a new parent for the two nodes we extracted
         HCNode *parent = new HCNode(totalCount,nodeOne->symbol, nodeOne,nodeTwo);
         //add the two popped nodes to the new parent node
         nodeOne->p = parent;
         nodeTwo->p = parent;
-        cout << "Parent Cout: " << parent->count << " Parent Symbol:  " << parent->symbol << " Parent c0 Child: " << parent->c0->symbol << " Parent c1 Child: " <<  parent->c1->symbol << endl; 
-       
        //add the new root node to the queue again
        pQueue.push(parent);
     }
@@ -45,25 +41,25 @@ void HCTree::build(const vector<int>& freqs)
     //there is only one node, that is the root
     if (pQueue.size() == 1){
         root = pQueue.top();
-        cout << "Root Symbol: " << root->symbol << " Root Count: " << root->count << endl;
         pQueue.pop();    
     }
 
 }
-
+//Write char for length of code, char for ascII symbol, then bits for code
 void HCTree::encode(byte symbol, BitOutputStream& out) const
 {
     HCNode *currNode = leaves[symbol];
     //stack of int since writeBit takes in int parameter
-    std::stack<int> stack;
+    stack<int> bodyStack;
+    stack<int> headerStack;
     //we can't go above root since it has no parent
     while (currNode != root){
         HCNode *parentNode = currNode->p;
         if (parentNode->c0 == currNode){
             //node is on the left side of the parent
-            stack.push(0);
+           bodyStack.push(0);
         }else{
-            stack.push(1);
+           bodyStack.push(1);
         }
         currNode = parentNode;
     }
@@ -109,7 +105,6 @@ void HCTree::clearTree(HCNode *node)
         //go left first and then right recursively
         clearTree(node->c0);
         clearTree(node->c1);
-
         //finally delete the node from the tree
         delete node;
         node = nullptr;
